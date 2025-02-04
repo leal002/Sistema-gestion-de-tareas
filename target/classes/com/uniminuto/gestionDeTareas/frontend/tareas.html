@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión de Tareas</title>
+    <link rel="stylesheet" href="stylesTask.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Bienvenido al Sistema de Gestión de Tareas</h1>
+        </header>
+
+        <div class="create-task-form">
+            <h2>Crear Tarea</h2>
+            <form id="createTaskForm">
+                <label for="title">Título:</label>
+                <input type="text" id="title" required>
+
+                <label for="description">Descripción:</label>
+                <textarea id="description" required></textarea>
+
+                <label for="dueDate">Fecha de vencimiento:</label>
+                <input type="datetime-local" id="dueDate" required>
+
+                <label for="status">¿Completada?</label>
+                <select id="status" required>
+                    <option value="true">Sí</option>
+                    <option value="false">No</option>
+                </select>
+
+                <label for="userId">Usuario:</label>
+                <select id="userId" required>
+                    <option value="" disabled selected>Selecciona un usuario</option>
+                    <!-- Los nombres de usuario se agregarán dinámicamente aquí -->
+                </select>
+
+                <button type="submit">Crear Tarea</button>
+            </form>
+        </div>
+
+        <!-- Lista de tareas -->
+        <div class="task-list">
+            <h2>Tareas</h2>
+            <ul id="taskList"></ul>
+        </div>
+    </div>
+
+    <script src="tareas.js"></script>
+</body>
+
+</html>
