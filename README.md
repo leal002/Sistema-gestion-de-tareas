@@ -32,7 +32,7 @@ Este sistema es parte de un proyecto de gestión de tareas en el contexto de una
 ## Requisitos
 
 - **JDK 11 o superior**
-- **Maven** o **Gradle** (dependiendo del sistema de construcción utilizado)
+- **Maven** 
 - **PostgreSQL**: Base de datos local o remota para almacenar los datos.
 
 ## Instalación
