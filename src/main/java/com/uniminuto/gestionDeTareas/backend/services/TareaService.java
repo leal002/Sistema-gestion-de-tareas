@@ -17,18 +17,23 @@ public class TareaService {
         this.tareaRepository = tareaRepository;
     }
 
+    /*crear tarea */
     public Tarea createTask(Tarea task) {
         return tareaRepository.save(task);
     }
 
+    /*Obtener todas las tareas */
     public List<Tarea> getAllTasks() {
         return tareaRepository.findAll();
     }
+
+    /*obtener tarea por ID */
 
     public Optional<Tarea> getTaskById(Long id) {
         return tareaRepository.findById(id);
     }
 
+    /*Actualizar tarea  */
     public Tarea updateTask(Long id, Tarea tarea) {
         if (tareaRepository.existsById(id)) {
             tarea.setId(id);
@@ -37,6 +42,8 @@ public class TareaService {
             return null;
         }
     }
+
+    /*Borrar tarea */
 
     public boolean deleteTask(Long id) {
         if (tareaRepository.existsById(id)) {

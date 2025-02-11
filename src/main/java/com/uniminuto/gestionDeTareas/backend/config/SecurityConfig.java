@@ -18,10 +18,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf().disable() // 🔴 DESHABILITA CSRF PARA PRUEBAS
+            .csrf().disable() 
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/app/register", "/app/login", "/app/createTask", "/app/tasks", "/app/{id}", "/users").permitAll() // 🔵 PERMITIR ACCESO A ESTAS RUTAS
-                .anyRequest().authenticated() // 🔴 TODAS LAS DEMÁS NECESITAN TOKEN
+                .anyRequest().authenticated() 
             )
             .formLogin().disable()
             .httpBasic().disable();
