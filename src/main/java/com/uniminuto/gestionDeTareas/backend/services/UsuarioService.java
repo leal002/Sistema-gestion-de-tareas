@@ -23,6 +23,7 @@ public class UsuarioService {
         this.jwtUtil = jwtUtil;
     }
 
+    /* Registrar un nuevo usuario */
     public String registrarUsuario(String username, String password) {
         if (usuarioRepository.findByUsername(username).isPresent()) {
             throw new RuntimeException("El usuario ya existe");
@@ -37,6 +38,8 @@ public class UsuarioService {
 
         return jwtUtil.generateToken(username);
     }
+
+    /*Auntenticar los usuarios */
 
     public String autenticarUsuario(String username, String password) {
         Optional<Usuario> usuarioOpt = usuarioRepository.findByUsername(username);
