@@ -12,7 +12,40 @@
     <div class="container">
         <header>
             <h1>Bienvenido al Sistema de Gestión de Tareas</h1>
+            <button class="logout-button" onclick="logout()">Cerrar Sesión</button>
         </header>
+
+        <div class="profile-management">
+            <h2>Gestión de Perfil</h2>
+            <p><strong>Nombre:</strong> <span id="userName">Cargando...</span></p>
+            <p><strong>Rol:</strong> <span id="userRole">Cargando...</span></p>
+            <button onclick="editProfile()">Editar Perfil</button>
+        </div>
+        
+        <!-- Modal -->
+        <div id="profileModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h2>Editar Perfil</h2>
+                <form id="profileForm">
+                    <label>Nombre:</label>
+                    <input type="text" id="name" required><br><br>
+        
+                    <label>Rol:</label>
+                    <input type="text" id="role" required><br><br>
+        
+                    <label>Contraseña Actual:</label>
+                    <input type="password" id="currentPassword" required><br><br>
+        
+                    <label>Nueva Contraseña:</label>
+                    <input type="password" id="newPassword"><br><br>
+        
+                    <button type="button" onclick="verifyAndSaveProfile()">Guardar Cambios</button>
+                </form>
+                <p id="errorMessage" style="color: red; display: none;"></p>
+            </div>
+        </div>
+        
 
         <div class="create-task-form">
             <h2>Crear Tarea</h2>
@@ -32,9 +65,9 @@
                     <option value="false">No</option>
                 </select>
 
-                <label for="userId">Usuario:</label>
+                <label for="userId">Rol y usuario:</label>
                 <select id="userId" required>
-                    <option value="" disabled selected>Selecciona un usuario</option>
+                    <option value="" disabled selected>Selecciona un rol y usuario</option>
                     <!-- Los nombres de usuario se agregarán dinámicamente aquí -->
                 </select>
 
@@ -42,14 +75,52 @@
             </form>
         </div>
 
+        
         <!-- Lista de tareas -->
         <div class="task-list">
             <h2>Tareas</h2>
             <ul id="taskList"></ul>
         </div>
+        
+        <!-- Modal para editar tareas -->
+<div id="editTaskModal" class="modaltask">
+    <div class="modal-content-task">
+        <span class="close" onclick="closeEditModal()">&times;</span>
+        <h2>Editar Tarea</h2>
+        <form id="editTaskForm">
+            <input type="hidden" id="editTaskId">
+
+            <label for="editTitle">Título:</label>
+            <input type="text" id="editTitle" required>
+
+            <label for="editDescription">Descripción:</label>
+            <textarea id="editDescription" required></textarea>
+
+            <label for="editDueDate">Fecha de vencimiento:</label>
+            <input type="datetime-local" id="editDueDate" required>
+
+            <label for="editStatus">¿Completada?</label>
+            <select id="editStatus" required>
+                <option value="true">Sí</option>
+                <option value="false">No</option>
+            </select>
+
+            <label for="editUserId">Rol y usuario:</label>
+            <select id="editUserId" required>
+                <option value="" disabled selected>Selecciona un rol y usuario</option>
+                <!-- Los nombres de usuario se agregarán dinámicamente aquí -->
+            </select>
+
+
+            <button type="button" onclick="saveTaskChanges()">Guardar Cambios</button>
+        </form>
+    </div>
+</div>
+
     </div>
 
     <script src="tareas.js"></script>
+    <script src="ModalPerfil.js"></script>
 </body>
 
 </html>

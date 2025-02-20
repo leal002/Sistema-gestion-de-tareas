@@ -9,5 +9,7 @@ import java.util.List;
 
 @Repository
 public interface TareaRepository extends JpaRepository<Tarea, Long> {
+
+    List<Tarea> findByUsuarioUsername(String username);
     
 }

@@ -1,13 +1,18 @@
 package com.uniminuto.gestionDeTareas.backend.controllers;
 
+import com.uniminuto.gestionDeTareas.backend.dto.UserDTO;
+import com.uniminuto.gestionDeTareas.backend.entities.Rol;
 import com.uniminuto.gestionDeTareas.backend.entities.Tarea;
 import com.uniminuto.gestionDeTareas.backend.entities.Usuario;
 import com.uniminuto.gestionDeTareas.backend.services.TareaService;
 import com.uniminuto.gestionDeTareas.backend.services.UsuarioService;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.config.Task;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -26,6 +31,14 @@ public class AppController {
         this.tareaService = tareaService;
     }
 
+    /*Obtener roles */
+    @GetMapping("/roles")
+    public List<String> getRoles(){
+        return Arrays.stream(Rol.values()) // Convierte los enums a una lista de strings
+                     .map(Rol::getDisplayName) // Usa getDisplayName() si usaste @JsonValue en el enum
+                    .toList();
+    }
+
     /*Obtener usuarios */
     @GetMapping("/users")
     public List<Usuario> getUsers() {
@@ -35,7 +48,7 @@ public class AppController {
     /*Registrar los usuarios */
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Map<String, String> request) {
-        String token = usuarioService.registrarUsuario(request.get("username"), request.get("password"));
+        String token = usuarioService.registrarUsuario(request.get("username"), request.get("password"), request.get("rol"));
         return ResponseEntity.ok(Map.of("token", token));
     }
 
@@ -46,17 +59,52 @@ public class AppController {
         return ResponseEntity.ok(Map.of("token", token));
     }
 
+    /*Usuario autenticado */
+    
+    @GetMapping("/autenticado")
+    public ResponseEntity<UserDTO> obtenerUsuarioAutenticado(@RequestHeader("Authorization") String token) {
+        String jwt = token.substring(7); // Remueve "Bearer "
+        return ResponseEntity.ok(usuarioService.obtenerUsuarioAutenticado(jwt));
+    }
+
+    /*Verficar contraseña */
+    @PostMapping("/verificarcontraseña")
+    public ResponseEntity<Map<String, String>> verificarContraseña(@RequestHeader("Authorization") String token,
+                                            @RequestBody Map<String, String> request) {
+        String jwt = token.replace("Bearer ", "");
+        String password = request.get("password");
+
+        if (usuarioService.verificarContraseña(jwt, password)) {
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Contraseña verificada correctamente");
+            return ResponseEntity.ok(response); // 🔹 Responde un JSON válido
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Contraseña incorrecta"));
+        }
+    }
+
+    /*actualizar perfil */
+    @PutMapping("/actualizarperfil")
+    public ResponseEntity<UserDTO> actualizarPerfil(@RequestHeader("Authorization") String token,
+    @RequestBody UserDTO userDTO) {
+    String jwt = token.replace("Bearer ", "");
+     String currentPassword = userDTO.getCurrentPassword(); // 🔹 Se obtiene correctamente
+
+        return ResponseEntity.ok(usuarioService.actualizarPerfil(jwt, currentPassword, userDTO));
+}
+
     /*Crear una tarea */
     @PostMapping ("/createTask")
     public ResponseEntity<Tarea> createTask(@RequestBody Tarea tarea) {
         return ResponseEntity.ok(tareaService.createTask(tarea));
     }
 
-    /*Obtener todas las tareas */
-    @GetMapping ("/tasks")
-    public ResponseEntity<List<Tarea>> getAllTasks() {
-        List<Tarea> tareas = tareaService.getAllTasks(); 
-    return ResponseEntity.ok(tareas);
+    /*obtener todas las tareas */
+    @GetMapping("/tasks")
+    public ResponseEntity<List<Tarea>> getTasksForUser(@RequestHeader("Authorization") String token) {
+        String jwt = token.replace("Bearer ", "");
+        List<Tarea> tareas = tareaService.getTasksForUser(jwt);
+        return ResponseEntity.ok(tareas);
     }
 
     /*Obtener tarea por ID */
