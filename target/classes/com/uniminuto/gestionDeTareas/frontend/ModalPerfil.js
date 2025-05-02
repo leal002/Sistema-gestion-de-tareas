@@ -105,7 +105,7 @@ function verifyAndSaveProfile() {
         window.location.href = 'index.html';
     })
     .catch(error => {
-        console.error("Error en la actualización del perfil:", error);
+        console.error("Error en la actualización de tu pinche perfil:", error);
         errorMessage.textContent = error.message;
         errorMessage.style.display = "block";
     });
