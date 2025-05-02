@@ -99,7 +99,7 @@ function verifyAndSaveProfile() {
         return response.json().catch(() => ({})); // 🔹 Maneja respuesta vacía
     })
     .then(() => {
-        alert("Perfil actualizado con éxito");
+        alert("Perfil actualizado con mucho éxito");
         closeModal();
         loadUserProfile();
         window.location.href = 'index.html';
